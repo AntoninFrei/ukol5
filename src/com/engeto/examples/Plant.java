@@ -58,6 +58,26 @@ public class Plant {
         this.frequencyOfWatering = frequencyOfWatering;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public LocalDate getPlanted() {
+        return planted;
+    }
+
+    public LocalDate getWatering() {
+        return watering;
+    }
+
+    public int getFrequencyOfWatering() {
+        return frequencyOfWatering;
+    }
+
     public String getWateringInfo()  {
         String out = "Jméno rostliny:\t\t\t" + this.name;
         out += "\nPoslední zálivka:\t\t" + this.watering;

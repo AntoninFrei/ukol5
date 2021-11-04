@@ -2,6 +2,7 @@ package com.engeto.examples;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -28,33 +29,27 @@ public class PlantList {
         for (Plant item : Plants) out += item.getWateringInfo() + "\n-----------------------\n";
         return out;
     }
-    public void importFromFile() {
+    public void importFromFile(String fileName) {
         // Vymaže dosavadní položky:
         Plants.clear();
         // Načte ze souboru nové položky:
-        try (Scanner scanner = new Scanner(new File("kvetiny.txt"))) {
+        try (Scanner scanner = new Scanner(new File(fileName))) {
             int lineNumber = 0;
             while (scanner.hasNextLine()) {
                 lineNumber++;
                 String nextLine = scanner.nextLine();
                 String[] items = nextLine.split("\t");
                 if (items.length != 5) {
-                    System.out.println("Je to blbe");
                     throw new PlantException("Nesprávný počet položek na řádku číslo: " + lineNumber + ": " + nextLine);
                 }
 
-                System.out.println(nextLine);
-
-                System.out.println(items[4]);
                 DateTimeFormatter pattern = DateTimeFormatter.ISO_LOCAL_DATE;
                 LocalDate planted = LocalDate.parse(items[3], pattern);
                 LocalDate watering = LocalDate.parse(items[4], pattern);
-                System.out.println(planted+"\n");
                 int frequencyOfWatering = Integer.parseInt(items[2]);
 
-                Plant xxx = new Plant(items[0], items[1], planted,
-                  watering, frequencyOfWatering);
-                Plants.add(xxx);
+                Plants.add(new Plant(items[0], items[1], planted,
+                  watering, frequencyOfWatering));
             }
 
         }
@@ -66,5 +61,22 @@ public class PlantList {
 
 
 
+    }
+
+
+    /**
+     * Zapíše obsah seznamu do výstupního souboru.
+     */
+    public void exportToFile(String fileName) {
+        try (PrintWriter writer = new PrintWriter(new File(fileName))) {
+            for (Plant plant : Plants) {
+                String outputLine =
+                        plant.getName() + "\t" + plant.getNote() + "\t" + plant.getFrequencyOfWatering() + "\t"
+                        + plant.getPlanted() + "\t" + plant.getWatering();
+                writer.println(outputLine);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
