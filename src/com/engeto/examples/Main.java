@@ -39,7 +39,8 @@ public class Main {
         System.out.println(listOfPlants.getAll());
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
-
-
+        System.out.println("\nTestovací načtení souborů s chybami\n");
+        listOfPlants.importFromFile("kvetiny-spatne-datum.txt.");
+        listOfPlants.importFromFile("kvetiny-spatne-frekvence.txt");
     }
 }

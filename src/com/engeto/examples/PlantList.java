@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -44,9 +45,35 @@ public class PlantList {
                 }
 
                 DateTimeFormatter pattern = DateTimeFormatter.ISO_LOCAL_DATE;
-                LocalDate planted = LocalDate.parse(items[3], pattern);
-                LocalDate watering = LocalDate.parse(items[4], pattern);
-                int frequencyOfWatering = Integer.parseInt(items[2]);
+                LocalDate watering;
+                LocalDate planted;
+                try {
+                    watering = LocalDate.parse(items[3], pattern);
+                    planted = LocalDate.parse(items[4], pattern);
+                } catch (DateTimeParseException ex) {
+                    throw new PlantException("Nesprávný formát datumu:  na řádku číslo: "
+                            +lineNumber+": "+nextLine+"!");
+
+                }
+                if (watering.isBefore(planted)) {
+                    throw new PlantException("Chyba na řádku číslo: " + lineNumber + ": " + nextLine
+                            + ".\n Datum zálivky je starší než datum zasazení.!");
+                }
+                int frequencyOfWatering = 0;
+                try {
+                    frequencyOfWatering = Integer.parseInt(items[2]);
+                } catch (NumberFormatException ex) {
+                    throw new PlantException("Nesprávný formát frekvence zálivek:  na řádku číslo: "
+                            +lineNumber+": "+nextLine+"!");
+                }
+
+
+
+                if (frequencyOfWatering <= 0) {
+
+                    throw new PlantException("Chyba na řádku číslo: " + lineNumber + ": " + nextLine
+                            + ".\n Frekvence zálivky musí být větší než nula!");
+                }
 
                 Plants.add(new Plant(items[0], items[1], planted,
                   watering, frequencyOfWatering));
@@ -72,7 +99,7 @@ public class PlantList {
             for (Plant plant : Plants) {
                 String outputLine =
                         plant.getName() + "\t" + plant.getNote() + "\t" + plant.getFrequencyOfWatering() + "\t"
-                        + plant.getPlanted() + "\t" + plant.getWatering();
+                        + plant.getWatering() + "\t" + plant.getPlanted();
                 writer.println(outputLine);
             }
         } catch (FileNotFoundException e) {
