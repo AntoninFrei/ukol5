@@ -10,10 +10,23 @@ public class Main {
 
     public static void main(String[] args) {
 
+
+
         PlantList listOfPlants = new PlantList();
 
         String fileName = "kvetiny.txt";
-        listOfPlants.importFromFile("kvetiny.txt");
+        try {
+            listOfPlants.importFromFile("kvetiny.txt");
+        }
+        catch (PlantException e) {
+            e.printStackTrace();
+
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
         System.out.println("\nNacteno ze souboru: " + fileName + "\n");
         System.out.println(listOfPlants.getAll());
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
@@ -23,8 +36,6 @@ public class Main {
         listOfPlants.add(new Plant("Růře červená"));
 
 
-       // System.out.println(listOfPlants.getAll());
-        //System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         listOfPlants.remo(2);
         System.out.println("\nPo upravach:\n");
         System.out.println(listOfPlants.getAll());
@@ -34,13 +45,43 @@ public class Main {
         fileName = "vystup.txt";
         listOfPlants.exportToFile(fileName);
 
-        listOfPlants.importFromFile(fileName);
+        try {
+            listOfPlants.importFromFile(fileName);
+        }
+        catch (PlantException e) {
+            e.printStackTrace();
+
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         System.out.println("\nZnovu načteno ze souboru: " + fileName + "\n");
         System.out.println(listOfPlants.getAll());
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
         System.out.println("\nTestovací načtení souborů s chybami\n");
-        listOfPlants.importFromFile("kvetiny-spatne-datum.txt.");
-        listOfPlants.importFromFile("kvetiny-spatne-frekvence.txt");
+        try {
+            listOfPlants.importFromFile("kvetiny-spatne-datum.txt.");
+        }
+        catch (PlantException e) {
+            e.printStackTrace();
+
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            listOfPlants.importFromFile("kvetiny-spatne-frekvence.txt");
+        }
+        catch (PlantException e) {
+            e.printStackTrace();
+
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 }

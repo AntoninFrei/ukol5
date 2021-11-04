@@ -30,7 +30,7 @@ public class PlantList {
         for (Plant item : Plants) out += item.getWateringInfo() + "\n-----------------------\n";
         return out;
     }
-    public void importFromFile(String fileName) {
+    public void importFromFile(String fileName) throws PlantException, FileNotFoundException {
         // Vymaže dosavadní položky:
         Plants.clear();
         // Načte ze souboru nové položky:
@@ -50,7 +50,7 @@ public class PlantList {
                 try {
                     watering = LocalDate.parse(items[3], pattern);
                     planted = LocalDate.parse(items[4], pattern);
-                } catch (DateTimeParseException ex) {
+                } catch (DateTimeParseException e) {
                     throw new PlantException("Nesprávný formát datumu:  na řádku číslo: "
                             +lineNumber+": "+nextLine+"!");
 
@@ -62,7 +62,7 @@ public class PlantList {
                 int frequencyOfWatering = 0;
                 try {
                     frequencyOfWatering = Integer.parseInt(items[2]);
-                } catch (NumberFormatException ex) {
+                } catch (NumberFormatException e) {
                     throw new PlantException("Nesprávný formát frekvence zálivek:  na řádku číslo: "
                             +lineNumber+": "+nextLine+"!");
                 }
@@ -80,11 +80,12 @@ public class PlantList {
             }
 
         }
-        catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (PlantException e) {
-            e.printStackTrace();
-        }
+//        catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        catch (PlantException e) {
+////            e.printStackTrace();
+////        }
 
 
 
